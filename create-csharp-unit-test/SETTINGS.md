@@ -2,6 +2,10 @@
 
 このファイルは利用者が手動で編集できます。値を変更した場合、次回のスキル起動から反映します。
 
+## 検索設定
+
+- `search-timeout-seconds`: `60`
+
 ## コーディング規約書
 
 - `path`: `unset`
@@ -9,7 +13,7 @@
 - `use`: `no`
 - `searched`: `no`
 - `search-duration-ms`: `not-measured`
-- `search-duration-over-60-seconds`: `no`
+- `search-duration-exceeded-timeout`: `no`
 - `search-disabled`: `no`
 
 ## ユニットテストガイドライン
@@ -19,7 +23,7 @@
 - `use`: `no`
 - `searched`: `no`
 - `search-duration-ms`: `not-measured`
-- `search-duration-over-60-seconds`: `no`
+- `search-duration-exceeded-timeout`: `no`
 - `search-disabled`: `no`
 
 ## 設定値の意味
@@ -29,7 +33,8 @@
 - `use`: 次回以降のテスト生成で文書を使うかどうかです。`yes` または `no` を指定します。
 - `searched`: 文書の所在検索を実行した場合は `yes`、まだ実行していない場合は `no` にします。
 - `search-duration-ms`: 文書の所在を検索した実測時間をミリ秒で記録します。未計測の場合は `not-measured` とします。
-- `search-duration-over-60-seconds`: 検索に1分以上かかった場合は `yes` にします。
+- `search-timeout-seconds`: 文書ごとの検索1回に適用する共通タイムアウト秒数です。正の整数を指定します。未設定、不正な値、または `0` 以下の場合は既定値 `60` を使用します。検索時間にはローカル文書の検索、関連コメントの確認、関連URLの取得・確認を含めます。
+- `search-duration-exceeded-timeout`: `search-duration-ms` が `search-timeout-seconds` 以上の場合は `yes`、それ未満の場合は `no` にします。
 - `search-disabled`: `yes` の場合、自動検索しません。文書の所在を利用者に確認します。利用者が明示的に再検索を選んだ場合は検索できます。
 
 `status: approved` と `use: yes` の文書は、テスト生成のたびに必ず最新内容を読み込みます。登録済みの `path` から読み込めない場合、または検索候補・利用者指定の文書を新たに確認する場合は、内容の概要と文書種別への適合性を利用者に示し、明示的な承認を得るまでは使用・登録しません。`status: not-found` の場合は自動検索せず、文書が見つからなかったことを伝えて利用者の判断を確認します。`status: rejected` と `use: no` の場合は検索・再確認をせず、文書種別ごとの代替資料を参考にします。コーディング規約書の代替資料はこのプロジェクト内の関連するC#ファイル、ユニットテストガイドラインの代替資料は関連する既存テストファイルとテストプロジェクト設定です。再検討する場合は、利用者が該当項目の `status` を `pending` に戻します。
